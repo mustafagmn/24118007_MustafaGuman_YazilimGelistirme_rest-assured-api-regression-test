@@ -1,15 +1,22 @@
 package com.mustafaguman.api.tests;
 
-import com.mustafaguman.api.base.BaseTest;
-import com.mustafaguman.api.models.PostRequest;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.emptyOrNullString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import com.mustafaguman.api.base.BaseTest;
+import com.mustafaguman.api.models.PostRequest;
+
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
 
 /**
  * JSONPlaceholder /posts Servisi Otomatik API Regresyon Testleri
