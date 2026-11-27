@@ -29,7 +29,7 @@ public abstract class BaseTest {
      * @BeforeAll: Test sinifi baslamadan once SADECE 1 KEZ calisir ve ortak ayarlari hazirlar.
      */
     @BeforeAll
-    static void setup() {
+    public static void setup() {
         // Turkce Windows sistemlerde 404 gibi 4xx yanitlarinda olusan I/i karakter donusumu sorununu onler
         Locale.setDefault(Locale.ENGLISH);
 
