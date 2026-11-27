@@ -33,6 +33,7 @@ public class PostApiRegressionTest extends BaseTest {
     @Order(1)
     @DisplayName("GET /posts/1 - Tekil kayit getirme, body ve sure kontrolu")
     void shouldGetSinglePostSuccessfully() {
+        System.out.println("\n=== [TEST 1] GET /posts/1 - SERVISTEN DONEN CIKTI (RESPONSE BODY) ===");
         given()
                 // ON KOSUL: BaseTest'te tanimlanan ortak Base URL ve JSON header ayarlarini kullan
                 .spec(requestSpec)
@@ -40,8 +41,8 @@ public class PostApiRegressionTest extends BaseTest {
                 // AKSIYON: 1 numarali kaydi cekmek icin GET istegi gonder
                 .get("/posts/1")
         .then()
-                // Sadece bir dogrulama basarisiz olursa detayli hata logu yazdir
-                .log().ifValidationFails()
+                // Servisten donen JSON ciktisini terminalde goster
+                .log().body()
                 // 1. STATUS CODE KONTROLU: Istek basarili sekilde 200 OK donmeli
                 .statusCode(200)
                 // 2. RESPONSE BODY KONTROLU: Donen JSON icindeki alanlari dogrula
@@ -85,27 +86,31 @@ public class PostApiRegressionTest extends BaseTest {
     @Order(3)
     @DisplayName("POST /posts - JSON Request Body ile yeni kayit olusturma testi")
     void shouldCreateNewPostWithJsonBody() {
-        // Request Body olarak gonderilecek veriyi POJO nesnesi seklinde hazirliyoruz
+        // Request Body (GIRDI) olarak gonderilecek veriyi POJO nesnesi seklinde hazirliyoruz
         // (Jackson bu nesneyi otomatik olarak JSON formatina cevirip istege ekler)
         PostRequest yeniKayit = new PostRequest(
-                "Yazilim Test Muhendisligi Odevi",
+                "Mustafa Guman - Yazilim Test Muhendisligi",
                 "Rest Assured ile otomatik API regresyon testi ornegi.",
                 1
         );
 
+        System.out.println("\n=== [TEST 3] POST /posts - GONDERILEN GIRDI (REQUEST BODY) & DONEN CIKTI (RESPONSE BODY) ===");
         given()
                 // ON KOSUL: Ortak ayarlar + JSON Request Body ekleniyor
                 .spec(requestSpec)
                 .body(yeniKayit)
+                // Gonderilen JSON girdisini terminalde goster
+                .log().body()
         .when()
                 // AKSIYON: Yeni kayit olusturmak icin /posts adresine POST istegi gonder
                 .post("/posts")
         .then()
-                .log().ifValidationFails()
+                // Servisten donen JSON ciktisini terminalde goster
+                .log().body()
                 // 1. STATUS CODE KONTROLU: Yeni kayit olusturuldugu icin 201 Created donmeli
                 .statusCode(201)
                 // 2. RESPONSE BODY KONTROLU: Gonderdigimiz veriler cevapta aynen donmus mu?
-                .body("title", equalTo(yeniKayit.getTitle()))     // Baslik eslesmeli
+                .body("title", equalTo(yeniKayit.getTitle()))     // Baslik eslesmeli ("Mustafa Guman - ...")
                 .body("body", equalTo(yeniKayit.getBody()))       // Icerik eslesmeli
                 .body("userId", equalTo(yeniKayit.getUserId()))   // Kullanici ID eslesmeli
                 .body("id", notNullValue())                       // Servis yeni bir id uretmis olmali
